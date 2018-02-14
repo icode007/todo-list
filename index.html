@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
     <title>My Todo List</title>
@@ -9,12 +9,15 @@
 <body>
     <div class="container">
         <h1>My Todo List</h1>
+        <!-- 添加task部分 -->
         <div class="task-add">
-            <input type="text" placeholder="请输入任务..." id="task-content" autofocus>
+            <input type="text" placeholder="请输入任务..." autofocus>
             <button id="task-submit">submit</button>
         </div>
+
+        <!-- 显示task列表部分 -->
         <div class="task-list" id="task-list">
-<!--             <div class="task-item" data-id="">
+       <!-- <div class="task-item" data-id="">
                 <input type="checkbox">
                 <span>下午去买菜</span>
                 <a href="#" id="task-delete">delete</a>
@@ -22,9 +25,13 @@
             </div> -->
         </div>
 
+
+        <!-- 显示task详情时遮罩部分 -->
         <div class="task-detail-mask"></div>
+
+        <!-- task详情部分 -->
         <div class="task-detail">
-<!--             <h2 class="task-detail-header">看电影</h2>
+        <!--<h2 class="task-detail-header">看电影</h2>
             <textarea id="description"></textarea>
             <div class="task-detail-time">
                 <p>提醒时间：</p>
@@ -33,7 +40,7 @@
             <button id="update">更新</button> -->
         </div>
     </div>
-
+    
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="js/index.js"></script>
 </body>
