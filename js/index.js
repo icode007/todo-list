@@ -1,79 +1,106 @@
 ;(function(){
     'use strict';
-
+    //获取taskList, taskList作为全局对象存在，任务的存取，渲染都依赖此对象。
     var taskList = getTaskList();
     
     $(document).ready(function(){
-        //根据已有数据渲染页面，绑定事件
-        init();
+        var   $taskSubmit = $('#task-submit')    //提交任务按钮
+            , $taskContent = $taskSubmit.prev()  //添加任务输入框
+            , $taskItem                          //任务项
+            , $taskDetail                        //任务详情项
+            , $taskDetailMask                    //任务详情遮罩
+            ;
 
-        //给task提交按钮绑定click事件
-        $('#task-submit').click(function(){
-            var val = $('#task-content').val();
-            var newTask = {};
+        //根据已有数据渲染任务列表，绑定事件
+        update();
+
+        //绑定提交任务事件
+        $taskSubmit.click(function(){
+            var val = $taskContent.val(), newTask = {};
             if(val != ''){
                 newTask.name = val;
                 newTask.desc = '';
                 newTask.time = '';
                 newTask.complete = false;
                 taskList.push(newTask);
-                init();
-                $('#task-content').val('');
+                update();
+                $taskContent.val('');
                 storeTaskList(taskList);
                 return false;
             }            
         });
         
-        //给task输入框绑定回车事件.
-        $('#task-content').keyup(function(e){
+        //给任务输入框绑定回车事件.
+        $taskContent.keyup(function(e){
             if(e.which == 13){
-                $('#task-submit').trigger('click');
+                $taskSubmit.trigger('click');
             }
         });
 
+        /*
+         * update函数是对渲染任务列表，给任务绑定事件的封装。
+         */
+        function update(){
+            renderTaskList(taskList);
+            bindDeleteEvent();
+            bindDetailEvent();
+            bindDoubleClick();
+            hideDetailEvent();
+            bindCompleteEvent();
+        }
 
-        //给delete按钮绑定删除task事件
+        /* 
+         * 给任务绑定删除任务事件
+         */
         function bindDeleteEvent(){
-            $('.task-item .task-delete').click(function(e){
+            $taskItem = $('.task-item');
+            $taskItem.find('.task-delete').click(function(e){
                 var bool = confirm("确定删除此任务吗？")
                 if(!bool){return false;}
                 var id = $(this).parent().attr("data-id");
                 taskList.splice(id, 1);
-                init();
+                update();
                 storeTaskList(taskList);
                 return false;
-            })
+            });
         }
 
         //给detail按钮绑定详情事件
         function bindDetailEvent(){
+            $taskDetail = $('.task-detail');
+            $taskDetailMask = $taskDetail.prev();
+
             $('.task-item .show-detail').click(function(e){
-                var id = $(this).parent().attr('data-id');
-                var task = taskList[id];
-                $('.task-detail-mask').show();
-                $('.task-detail').show();
+                var id = $(this).parent().attr('data-id'), task = taskList[id];
+
+                //显示task详情部分，根据task渲染task详情
+                $taskDetailMask.show();
+                $taskDetail.show();
                 renderTaskDetail(task);
-                //添加双击事件
+
+                //给task详情name添加双击事件。
                 $('.task-detail-header').dblclick(function(){
                     $(this).replaceWith('<input class="task-detail-input" value="'+task.name+'"></input>')
-                })
+                });
 
-                //添加更新事件
+                //给task详情添加更新事件
                 $('#update').click(function(){
                     task.name = $('.task-detail-input').val() || $('.task-detail-header').html();
                     task.desc = $('#description').val() || '';
                     task.time = $('.task-detail-time input').val() || '';
-                    $('.task-detail-mask').trigger('click');
-                    init();
+                    $taskDetailMask.trigger('click');
+                    update();
                     storeTaskList(taskList);
-                })
+                });
 
                 return false;
-            })
+            });
         }
 
 
-        //渲染task-detail
+        /*
+         * 根据task渲染任务详情
+         */
         function renderTaskDetail(task){
             var template = '<h2 class="task-detail-header">'+ task.name +'</h2>\
                             <textarea id="description" value=""></textarea>\
@@ -86,53 +113,47 @@
             $('#description').val(task.desc);
         }
 
-        //绑定鼠标双击事件
+        /*
+         * 给task绑定鼠标双击事件
+         */
         function bindDoubleClick(){
-            $('.task-item').dblclick(function(){
+            $taskItem.dblclick(function(){
                 $(this).find('.show-detail').trigger('click');
             })
         }
 
-
-        //给task-detail-mask添加点击隐藏task事件
+        /*
+         * 添加点击隐藏详情事件
+         */
         function hideDetailEvent(){
-            $('.task-detail-mask').click(function(){
-                var $taskDetail = $('.task-detail');
+            $taskDetailMask.click(function(){
                 $taskDetail.hide();
-                $('.task-detail-mask').hide();
+                $(this).hide();
             })
         }
 
-        //绑定完成事件
+        /*
+         * 给checkbox绑定任务完成事件
+         */
         function bindCompleteEvent(){
-            $('.task-item input[type="checkbox"]').click(function(){
-                var index = $(this).parent().attr('data-id');
-                var task = taskList[index];
-                var isComplete = $(this).is(':checked');
+            $('.task-item input').click(function(){
+                var index = $(this).parent().attr('data-id')
+                    , task = taskList[index]
+                    , isComplete = $(this).is(':checked');
                 if(isComplete){
                     task.complete = true;
                 }else{
                     task.complete = false;
                 }
-                init();
+                update();
                 storeTaskList(taskList);
             })
         }
-
-
-        //init函数是进一步的抽象，包括渲染task-list，给task绑定各种事件
-        function init(){
-            renderTaskList(taskList);
-            bindDetailEvent();
-            bindDeleteEvent();
-            bindDoubleClick();
-            hideDetailEvent();
-            bindCompleteEvent();
-        }
-
     });
 
-    //从localStorage获取节点列表
+    /*
+     * 从localStorage获取数据，将数据转换为taskList对象并返回
+     */
     function getTaskList(){
         var taskList = localStorage.getItem('taskList');
         taskList = JSON.parse(taskList);
@@ -141,28 +162,34 @@
         }
         return taskList;
     }
-    //将taskList存入localStorage
+
+    /* 
+     * 将taskList使用JSON转换后存入localStorage
+     */
     function storeTaskList(taskList){
         taskList = JSON.stringify(taskList);
         localStorage.setItem('taskList', taskList);
     }
 
+    /*
+     * 根据taskList渲染数据到页面
+     */
     function renderTaskList(tasklist){
-        var template = '', $taskList = $('#task-list');
+        var template = '', $taskList = $('#task-list'), complete;
         $taskList.empty();//清空节点，防止重复渲染
         $.each(taskList, function(index, value){
-            template = '<div class="task-item'+ (value.complete ? " complete" : " ")+'" data-id="' + index + '">\
-                            <input type="checkbox"'+ (value.complete? " checked" : " ")+'>\
+            complete = value.complete;
+            template = '<div class="task-item'+ (complete ? " complete" : " ")+'" data-id="' + index + '">\
+                            <input type="checkbox"'+ (complete? " checked" : " ")+'>\
                             <span>'+ value.name +'</span>\
                             <a href="#" class="task-delete">delete</a> \
                             <a href="#" class="show-detail">detail</a> \
                         </div>';
-            if(value.complete){
+            if(complete){
                 $taskList.append(template);
             }else{
                 $taskList.prepend(template);
             }
-        })
+        });
     }
-
 })();
