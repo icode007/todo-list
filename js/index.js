@@ -106,11 +106,17 @@
                             <textarea id="description" value=""></textarea>\
                             <div class="task-detail-time">\
                                 <p>提醒时间：</p>\
-                                <input type="date" value="'+ task.time +'">\
+                                <input type="text" id="datetimepicker" value="'+ task.time +'">\
                             </div>\
                             <button id="update">更新</button>';
             $('.task-detail').empty().append(template);
             $('#description').val(task.desc);
+            
+            //引入datetimepicker组件
+            $('#datetimepicker').datetimepicker({
+                format: "Y-m-d H:i"
+            }); 
+            $.datetimepicker.setLocale('zh'); //设置日期组件显示中文
         }
 
         /*

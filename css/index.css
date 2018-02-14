@@ -127,7 +127,7 @@ div.task-item.complete{
 .task-detail textarea:focus, .task-detail-input:focus{
     background: #efefef;
 }
-.task-detail-time input[type="date"]{
+.task-detail-time input{
     border:none;
     padding: 10px;
     width: 90%;
