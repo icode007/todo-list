@@ -1,0 +1,147 @@
+/*全局通用设置*/
+body{
+    background: rgba(44, 93, 104, .97);
+    color: #eee;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+input[type="text"], button{
+    border: none;
+    border-radius: 4px;
+}
+a{
+    text-decoration: none;
+    color: #000;
+}
+a:hover{
+    text-decoration: underline;
+}
+div.task-item.complete{
+    background: rgba(200,200,200,.7);
+}
+
+
+/*标题*/
+.container{
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+.container h1{
+    text-align: center;
+    font-family: "Times New Roman", Times, Baskerville, Georgia, serif;
+    font-size: 50px;
+}
+
+
+/*任务列表*/
+.task-add input{
+    width: 80%;
+    height: 30px;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #dedede;
+}
+.task-add input:hover, .task-add input:focus{
+    background: #efefef;
+}
+.task-add button{
+    width: 150px;
+    height: 46px;
+    padding: 8px;
+    font-size: 20px;
+    float: right;
+    background: rgba(237, 115, 115, .89);
+}
+.task-add button:hover{
+    background: rgba(233, 55,55,.89);
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+.task-list .task-item{
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.task-list .task-item:hover{
+    background-color: #efefef;
+}
+.task-list .task-item a{
+    float: right;
+    margin-left: 15px;
+    color: #bcbcbc;
+}
+.task-list .task-item a:hover{
+    color: orange;
+}
+
+
+/*任务详情*/
+.task-detail-mask{
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.3);
+}
+.task-detail{
+    display: none;
+    background: #fff;
+    color: #2b2b2b;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 20px;
+    right: 0px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    overflow: auto;
+    padding: 10px;
+    text-align: center;
+}
+.task-detail-header{
+    font-weight: normal;
+    cursor: pointer;
+}
+.task-detail-input{
+    width: 90%;
+    box-sizing: border-box;
+    padding: 10px;
+    background: #dedede;
+    margin-bottom: 10px;
+    border:none;
+}
+.task-detail textarea{
+    width: 90%;
+    height: 80px;
+    background: #dedede;
+    border:none;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.task-detail textarea:focus, .task-detail-input:focus{
+    background: #efefef;
+}
+.task-detail-time input[type="date"]{
+    border:none;
+    padding: 10px;
+    width: 90%;
+    box-sizing: border-box;
+    background: #dedede;
+}
+.task-detail button{
+    margin-top: 20px;
+    width: 80px;
+    height: 30px;
+    border-radius: 2px;
+    background: rgba(237, 115, 115, .89);
+}
+.task-detail button:hover{
+    background: rgba(233, 55,55,.89);
+    color: #fff;
+}
