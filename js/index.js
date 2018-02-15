@@ -1,7 +1,7 @@
 ;(function(){
     'use strict';
     //获取taskList, taskList作为全局对象存在，任务的存取，渲染都依赖此对象。
-    var taskList = getTaskList();
+    var taskList = getTaskList(), $body = $('body'), $window = $(window);
     
     $(document).ready(function(){
         var   $taskSubmit = $('#task-submit')    //提交任务按钮
@@ -9,7 +9,7 @@
             , $taskItem                          //任务项
             , $taskDetail                        //任务详情项
             , $taskDetailMask                    //任务详情遮罩
-            ;
+            ; 
 
         //根据已有数据渲染任务列表，绑定事件
         update();
@@ -55,13 +55,22 @@
         function bindDeleteEvent(){
             $taskItem = $('.task-item');
             $taskItem.find('.task-delete').click(function(e){
-                var bool = confirm("确定删除此任务吗？")
-                if(!bool){return false;}
-                var id = $(this).parent().attr("data-id");
-                taskList.splice(id, 1);
-                update();
-                storeTaskList(taskList);
-                return false;
+                
+                var array = newConfirm("确定删除此任务吗？"), $this = $(this);
+
+                array[1].find('#confirm-content>:first').click(function(){
+                    array[0].remove();
+                    array[1].remove();
+                    var id = $this.parent().attr("data-id");
+                    taskList.splice(id, 1);
+                    update();
+                    storeTaskList(taskList);
+                    return false;
+                });
+                array[1].find('#confirm-content>:last').click(function(){
+                    array[0].remove();
+                    array[1].remove();
+                });
             });
         }
 
@@ -197,5 +206,29 @@
                 $taskList.prepend(template);
             }
         });
+    }
+
+    /*
+     * newConfirm用于替代浏览器的confirm函数完成一些功能。
+     */
+    function newConfirm(){
+        var $mask = $('<div id="confirm-mask"></div>'),
+            $box =  $('<div id="confirm-box">\
+                            <div style="padding: 5px 10px; font-weight: bold; font-size: 24px; text-align: center;">确定删除？</div>\
+                            <div id="confirm-content" style="text-align: center;margin-top: 10px;">\
+                                <button>确定</button><button id="cancel">取消</button>\
+                            </div>\
+                        </div>');
+
+        $body.append($mask);
+        $body.append($box);
+        $window.on('resize', function(){
+            $box.css({
+                top: 100,
+                left: ($body.width() - $box.width())/2,
+            })
+        });
+        $window.trigger('resize');        
+        return [$mask, $box];
     }
 })();

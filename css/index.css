@@ -145,3 +145,28 @@ div.task-item.complete{
     background: rgba(233, 55,55,.89);
     color: #fff;
 }
+
+/*弹框样式*/
+#confirm-mask{
+    position: fixed; background: rgba(0, 0, 0, 0.5); top: 0px; bottom: 0px; left: 0px; right: 0px;
+}
+
+#confirm-box{
+    color: rgb(68, 68, 68); width: 300px; height: auto; padding: 15px 10px; background: rgb(255, 255, 255); position: fixed; border-radius: 3px; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 2px;
+    top: 0px;
+}
+
+#confirm-box button{
+    color: #333;
+    cursor:pointer;
+    background: #dc9090;
+    border-radius: 3px;
+    padding: 5px;
+}
+#confirm-box button:first-child{
+    margin-right: 20px;
+}
+#confirm-box button:hover{
+    background: rgba(233, 55,55,.89);
+    color: #fff;
+}
