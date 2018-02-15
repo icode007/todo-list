@@ -197,8 +197,8 @@
             template = '<div class="task-item'+ (complete ? " complete" : " ")+'" data-id="' + index + '">\
                             <input type="checkbox"'+ (complete? " checked" : " ")+'>\
                             <span>'+ value.name +'</span>\
-                            <a href="#" class="task-delete">delete</a> \
-                            <a href="#" class="show-detail">detail</a> \
+                            <a href="#" class="task-delete">删除</a> \
+                            <a href="#" class="show-detail">详情</a> \
                         </div>';
             if(complete){
                 $taskList.append(template);
